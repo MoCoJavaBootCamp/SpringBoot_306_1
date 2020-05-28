@@ -3,6 +3,8 @@ package com.example.demo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -18,4 +20,17 @@ public class HomeCtrl {
         model.addAttribute("alldirectors", directorRepository.findAll());
         return "list";
     }
+
+    @RequestMapping("/newdirector")
+    public String newdirector(Model model) {
+        model.addAttribute("director", new Director());
+        return "newdirector";
+    }
+
+    @PostMapping("/process")
+    public String process(@ModelAttribute("director") Director director, Model model) {
+        directorRepository.save(director);
+        return "redirect:/list";
+    }
+
 }
